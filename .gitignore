@@ -7,3 +7,12 @@ __pycache__/
 .volumes
 migrations
 !migrations/__init__.py
+
+# infrastructure
+.terraform
+*.lock.hcl
+*.*.hcl
+*.tfstate
+*.backup
+.ssh
+.secrets.auto.tfvars
