@@ -1,0 +1,11 @@
+/__pycache__/
+/**/__pycache__/
+
+.env
+.env.sample
+.static
+.media
+.docker-compose
+.dockerignore
+Dockerfile
+poetry.lock

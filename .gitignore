@@ -2,3 +2,6 @@
 poetry.lock
 __pycache__/
 .env
+.static
+.media
+.volumes
