@@ -1,2 +1,4 @@
 # backend
 poetry.lock
+__pycache__/
+.env
