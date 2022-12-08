@@ -104,3 +104,46 @@ A full production backend API built with these tech stacks:
 
 ---
 
+### Deployment:
+
+#### Deploy Manually:
+- Read the infrastructure section and create the resources on AWS.
+- Export values and change them according to your infrastructure:
+  ```shell
+  export ENVIRONMENT=production;
+  
+  export AWS_REGION=us-east-1;
+  export AWS_ACCOUNT_ID=84920239930;
+  
+  export DOCKER_IMG=crewtech;
+  export DOCKER_TAG=latest;
+  
+  export ECR_REPO=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com;
+  export CREWTECH_IMAGE=$ECR_REPO/$DOCKER_IMG:$DOCKER_TAG;
+  
+  export SERVER_USER=ubuntu;
+  export SERVER_IP=123.40.894.089;
+  ```
+- Login to AWS ECR:
+  ```shell
+  aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+  ```
+- Build Docker Image:
+  ```shell
+  docker build -t $CREWTECH_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
+  ```
+- Push to AWS ECR:
+  ```shell
+  docker push $CREWTECH_IMAGE
+  ```
+- Copy the env file and the run script to the server:
+  ```shell
+  rsync backend/.env/.env.$ENVIRONMENT scripts/run_backend.py $SERVER_USER@$SERVER_IP:/home/$SERVER_USER
+  ```
+- Run Docker image on the server:
+  ```shell
+  ssh $SERVER_USER@$SERVER_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$CREWTECH_IMAGE"
+  ```
+
+---
+
