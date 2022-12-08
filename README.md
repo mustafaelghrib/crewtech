@@ -75,6 +75,10 @@ A full production backend API built with these tech stacks:
   ```shell
   docker compose -f infrastructure/.docker-compose.yml run --rm terraform plan -target="module.aws"
   ```
+- terraform plan circleci
+  ```shell
+  docker compose -f infrastructure/.docker-compose.yml run --rm terraform plan -target="module.circleci" --auto-approve
+  ```
 
 -
 - terraform apply all
@@ -85,6 +89,10 @@ A full production backend API built with these tech stacks:
   ```shell
   docker compose -f infrastructure/.docker-compose.yml run --rm terraform apply -target="module.aws" --auto-approve
   ```
+- terraform apply circleci
+  ```shell
+  docker compose -f infrastructure/.docker-compose.yml run --rm terraform apply -target="module.circleci" --auto-approve
+  ```
 
 - 
 - terraform destroy all
@@ -94,6 +102,10 @@ A full production backend API built with these tech stacks:
 - terraform destroy aws
   ```shell
   docker compose -f infrastructure/.docker-compose.yml run --rm terraform destroy -target="module.aws" --auto-approve
+  ```
+- terraform destroy circleci
+  ```shell
+  docker compose -f infrastructure/.docker-compose.yml run --rm terraform destroy -target="module.circleci" --auto-approve
   ```
 
 - 
