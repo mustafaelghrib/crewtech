@@ -8,6 +8,7 @@ A full production backend API built with these tech stacks:
 - Cloud Provider: _AWS: VPC, EC2, RDS, S3, ECR_.
 - Infrastructure as Code: _Terraform_.
 - CI/CD: _CircleCI_.
+- Version Control: _Git and GitHub_.
 
 ---
 
