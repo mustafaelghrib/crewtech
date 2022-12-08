@@ -30,7 +30,7 @@ A full production backend API built with these tech stacks:
 **Run the production environment locally:**
 - Get the environment variables from the infrastructure:
   ```shell
-  python scripts/get_infra_output.py --c=infrastructure/docker-compose.yml --m=aws --f=env
+  python scripts/get_infra_output.py --c=infrastructure/.docker-compose.yml --m=aws --f=env
   ```
 - Update the `backend/.env/.env.production` file.
 - Run Docker Compose:
@@ -156,6 +156,14 @@ A full production backend API built with these tech stacks:
   ```shell
   ssh $SERVER_USER@$SERVER_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$CREWTECH_IMAGE"
   ```
+
+#### Deploy with CircleCI:
+- Get the environment variables from the infrastructure:
+  ```shell
+  python scripts/get_infra_output.py --c=infrastructure/.docker-compose.yml --m=aws --f=circleci
+  ```
+- Store environment variables using CircleCI module in the infrastructure folder.
+- Create CircleCI config file using `generate_circleci_config` script.
 
 ---
 

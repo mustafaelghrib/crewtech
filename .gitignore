@@ -17,3 +17,7 @@ migrations
 *.backup
 .ssh
 .secrets.auto.tfvars
+
+# scripts
+yarn.lock
+node_modules
