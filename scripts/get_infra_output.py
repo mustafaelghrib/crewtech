@@ -14,7 +14,7 @@ compose = args.c
 module = args.m
 output_format = args.f
 
-command = f'docker compose -f {compose} run --rm terraform -chdir=src output -json {module}'
+command = f'docker compose -f {compose} run --rm terraform output -json {module}'
 process = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
 result = process.stdout.decode('utf-8')
 
