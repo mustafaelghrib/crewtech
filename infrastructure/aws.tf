@@ -50,6 +50,7 @@ module "aws" {
   instance_install_aws_cli_destination = "/tmp/install_aws_cli.sh"
   instance_install_aws_cli_command     = "/tmp/install_aws_cli.sh -C ${var.aws.access_key} -S ${var.aws.secret_key} -R ${var.aws.region} -A ${var.aws.account_id}"
 
+  repository_name = local.project_name
 }
 
 output "aws" {
