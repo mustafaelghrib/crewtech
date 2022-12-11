@@ -55,6 +55,6 @@ resource "aws_instance" "main" {
 
 }
 
-output "INSTANCE_PUBLIC_IP" { value = aws_instance.main.public_ip }
-output "INSTANCE_PUBLIC_DNS" { value = aws_instance.main.public_dns }
+output "INSTANCE_USER" { value = var.instance_user }
+output "INSTANCE_IP" { value = aws_instance.main.public_dns }
 output "INSTANCE_SSH_CONNECT" { value = "ssh ${var.instance_user}@${aws_instance.main.public_dns}" }
