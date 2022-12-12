@@ -5,7 +5,7 @@ A full production backend API built with these tech stacks:
 - Unit Testing: _Pytest_.
 - Packaging Management: _Poetry_.
 - Containerization: _Docker and Docker Compose_.
-- Cloud Provider: _AWS: VPC, EC2, RDS, S3, ECR_.
+- Cloud Provider: _AWS: EC2, RDS, S3, ECR_.
 - Infrastructure as Code: _Terraform_.
 - CI/CD: _CircleCI_.
 - Version Control: _Git and GitHub_.
@@ -125,17 +125,18 @@ A full production backend API built with these tech stacks:
   ```shell
   export ENVIRONMENT=production;
   
-  export AWS_REGION=us-east-1;
-  export AWS_ACCOUNT_ID=84920239930;
+  export AWS_REGION=<YOUR_AWS_REGION>;
+  export AWS_ACCOUNT_ID=<YOUR_AWS_ACCOUNT_ID>;
   
-  export DOCKER_IMG=crewtech;
-  export DOCKER_TAG=latest;
+  export DOCKER_IMG=<YOUR_DOCKER_IMG_NAME>;
+  export DOCKER_TAG=<YOUR_DOCKER_IMG_TAG>;
   
   export ECR_REPO=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com;
-  export CREWTECH_IMAGE=$ECR_REPO/$DOCKER_IMG:$DOCKER_TAG;
   
-  export SERVER_USER=ubuntu;
-  export SERVER_IP=123.40.894.089;
+  export FINAL_IMAGE=$ECR_REPO/$DOCKER_IMG:$DOCKER_TAG;
+  
+  export INSTANCE_USER=<YOUR_INSTANCE_USER>;
+  export INSTANCE_IP=<YOUR_INSTANCE_IP>;
   ```
 - Login to AWS ECR:
   ```shell
@@ -143,19 +144,21 @@ A full production backend API built with these tech stacks:
   ```
 - Build Docker Image:
   ```shell
-  docker build -t $CREWTECH_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
+  docker build -t $FINAL_IMAGE -f backend/Dockerfile backend --build-arg ENVIRONMENT=$ENVIRONMENT
   ```
 - Push to AWS ECR:
   ```shell
-  docker push $CREWTECH_IMAGE
+  docker push $FINAL_IMAGE
   ```
+
 - Copy the env file and the run script to the server:
   ```shell
-  rsync backend/.env/.env.$ENVIRONMENT scripts/run_backend.py $SERVER_USER@$SERVER_IP:/home/$SERVER_USER
+  rsync backend/.env/.env.$ENVIRONMENT scripts/run_backend.py $INSTANCE_USER@$INSTANCE_IP:/home/$INSTANCE_USER
   ```
+
 - Run Docker image on the server:
   ```shell
-  ssh $SERVER_USER@$SERVER_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$CREWTECH_IMAGE"
+  ssh $INSTANCE_USER@$INSTANCE_IP "python3 run_backend.py --env=.env.$ENVIRONMENT --image=$FINAL_IMAGE"
   ```
 
 #### Deploy with CircleCI:
@@ -164,7 +167,7 @@ A full production backend API built with these tech stacks:
   python scripts/get_infra_output.py --c=infrastructure/.docker-compose.yml --m=aws --f=circleci
   ```
 - Store environment variables using CircleCI module in the infrastructure folder.
-- Create CircleCI config file using `generate_circleci_config` script.
+- Create a CircleCI config file using `scripts/generate_circleci_config` script.
 
 ---
 
