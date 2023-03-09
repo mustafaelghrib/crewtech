@@ -87,6 +87,7 @@ workflows:
                 - main
           requires:
             - run_unit_tests
+          type: approval
       - deploy_docker_image_to_aws_ec2_instance:
           context:
             - crewtech-common-context
@@ -97,4 +98,5 @@ workflows:
                 - main
           requires:
             - run_unit_tests
-            - build_and_push_docker_image
+            - build_and_push_docker_image_to_aws_ecr
+          type: approval

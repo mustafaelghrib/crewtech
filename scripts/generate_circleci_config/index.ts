@@ -84,7 +84,8 @@ const build_and_push_docker_image_to_aws_ecr = () => {
     aws_ec2_deploy_workflow.addJob(job, {
         context: [`${project}-common-context`],
         filters: {branches: {only: ["main"]}},
-        requires: ['run_unit_tests']
+        requires: ['run_unit_tests'],
+        type: 'approval'
     })
 
 }
@@ -118,7 +119,8 @@ const deploy_docker_image_to_aws_ec2_instance = () => {
     aws_ec2_deploy_workflow.addJob(job, {
         context: [`${project}-common-context`, `${project}-${env}-context`],
         filters: {branches: {only: ["main"]}},
-        requires: ['run_unit_tests', 'build_and_push_docker_image']
+        requires: ['run_unit_tests', 'build_and_push_docker_image_to_aws_ecr'],
+        type: 'approval'
     })
 }
 
