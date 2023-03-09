@@ -17,15 +17,15 @@ A full production backend API built with these tech stacks:
 **Set the environment variables:**
 - Copy `backend/.env.sample/` folder and rename it to `backend/.env/`.
 
-**Run the base environment locally:**
-- Update the `backend/.env/.env.base` file.
+**Run the development environment locally:**
+- Update the `backend/.env/.env.development` file.
 - Run Docker Compose:
   ```shell
-  docker compose -f backend/.docker-compose/base.yml up -d --build
+  docker compose -f backend/.docker-compose/development.yml up -d --build
   ```
 - Run Pytest:
   ```shell
-  docker exec -it crewtech_base_django /bin/bash -c "/opt/venv/bin/pytest"
+  docker exec -it crewtech_development_django /bin/bash -c "/opt/venv/bin/pytest"
   ```
 
 **Run the production environment locally:**

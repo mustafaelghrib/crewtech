@@ -3,14 +3,13 @@ version: '3.9'
 services:
 
   django:
-    image: crewtech_base
-    container_name: crewtech_base_django
+    image: crewtech_development
+    container_name: crewtech_development_django
     build:
       context: ..
       dockerfile: Dockerfile
     restart: always
-    env_file:
-      - ../.env/.env.base
+    env_file: ../.env/.env.development
     ports:
       - "8000:8000"
     depends_on:
@@ -21,9 +20,8 @@ services:
 
   postgres:
     image: postgres:13-alpine
-    container_name: crewtech_base_postgres
-    env_file:
-      - ../.env/.env.base
+    container_name: crewtech_development_postgres
+    env_file: ../.env/.env.development
     ports:
       - "5432:5432"
     volumes:
