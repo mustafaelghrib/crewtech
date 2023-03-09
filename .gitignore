@@ -8,6 +8,7 @@ __pycache__/
 migrations
 !migrations/__init__.py
 .pytest_cache
+.venv
 
 # infrastructure
 .terraform
