@@ -9,8 +9,8 @@ const ubuntu = new CircleCI.executors.MachineExecutor("medium", "ubuntu-2204:202
 
 const circleci_config = new CircleCI.Config()
 
-const deploy_workflow = new CircleCI.Workflow("deploy_to_aws_ec2")
-circleci_config.addWorkflow(deploy_workflow)
+const aws_ec2_deploy_workflow = new CircleCI.Workflow("deploy_to_aws_ec2_instance_workflow")
+circleci_config.addWorkflow(aws_ec2_deploy_workflow)
 
 const run_unit_tests = () => {
 
@@ -55,16 +55,16 @@ const run_unit_tests = () => {
         command: `venv/bin/pytest`
     }))
 
-    deploy_workflow.addJob(job, {
+    aws_ec2_deploy_workflow.addJob(job, {
         context: [`${project}-common-context`],
         filters: {branches: {only: ["main"]}},
     })
 
 }
 
-const build_and_push_docker_image = () => {
+const build_and_push_docker_image_to_aws_ecr = () => {
 
-    const job = new CircleCI.Job("build_and_push_docker_image", ubuntu)
+    const job = new CircleCI.Job("build_and_push_docker_image_to_aws_ecr", ubuntu)
     circleci_config.addJob(job)
 
     job.addStep(new CircleCI.commands.Checkout())
@@ -81,7 +81,7 @@ const build_and_push_docker_image = () => {
         command: "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:latest"
     }))
 
-    deploy_workflow.addJob(job, {
+    aws_ec2_deploy_workflow.addJob(job, {
         context: [`${project}-common-context`],
         filters: {branches: {only: ["main"]}},
         requires: ['run_unit_tests']
@@ -89,9 +89,9 @@ const build_and_push_docker_image = () => {
 
 }
 
-const deploy_to_production_server = () => {
+const deploy_docker_image_to_aws_ec2_instance = () => {
 
-    const job = new CircleCI.Job("deploy_to_production_server", ubuntu)
+    const job = new CircleCI.Job("deploy_docker_image_to_aws_ec2_instance", ubuntu)
     circleci_config.addJob(job)
 
     job.addStep(new CircleCI.commands.Checkout())
@@ -115,7 +115,7 @@ const deploy_to_production_server = () => {
         command: `ssh $EC2_INSTANCE 'source .env.${env} && python3 run_backend.py --env=.env.${env} --image=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:latest'`
     }))
 
-    deploy_workflow.addJob(job, {
+    aws_ec2_deploy_workflow.addJob(job, {
         context: [`${project}-common-context`, `${project}-${env}-context`],
         filters: {branches: {only: ["main"]}},
         requires: ['run_unit_tests', 'build_and_push_docker_image']
@@ -123,8 +123,8 @@ const deploy_to_production_server = () => {
 }
 
 run_unit_tests()
-build_and_push_docker_image()
-deploy_to_production_server()
+build_and_push_docker_image_to_aws_ecr()
+deploy_docker_image_to_aws_ec2_instance()
 
 const yml_config = circleci_config.stringify();
 

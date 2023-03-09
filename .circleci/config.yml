@@ -32,7 +32,7 @@ jobs:
           name: Run Pytest
           working_directory: backend
           command: venv/bin/pytest
-  build_and_push_docker_image:
+  build_and_push_docker_image_to_aws_ecr:
     machine:
       image: ubuntu-2204:2022.10.1
     resource_class: medium
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Push to AWS ECR
           command: docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:latest
-  deploy_to_production_server:
+  deploy_docker_image_to_aws_ec2_instance:
     machine:
       image: ubuntu-2204:2022.10.1
     resource_class: medium
@@ -69,7 +69,7 @@ jobs:
           name: Run the script
           command: ssh $EC2_INSTANCE 'source .env.production && python3 run_backend.py --env=.env.production --image=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:latest'
 workflows:
-  deploy_to_aws_ec2:
+  deploy_to_aws_ec2_instance_workflow:
     jobs:
       - run_unit_tests:
           context:
@@ -78,7 +78,7 @@ workflows:
             branches:
               only:
                 - main
-      - build_and_push_docker_image:
+      - build_and_push_docker_image_to_aws_ecr:
           context:
             - crewtech-common-context
           filters:
@@ -87,7 +87,7 @@ workflows:
                 - main
           requires:
             - run_unit_tests
-      - deploy_to_production_server:
+      - deploy_docker_image_to_aws_ec2_instance:
           context:
             - crewtech-common-context
             - crewtech-production-context
