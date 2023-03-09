@@ -97,6 +97,5 @@ workflows:
               only:
                 - main
           requires:
-            - run_unit_tests
             - build_and_push_docker_image_to_aws_ecr
           type: approval
