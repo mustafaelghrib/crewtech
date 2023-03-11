@@ -1,4 +1,4 @@
-from .base import *
+from .development import *
 
 DEBUG = os.environ.get("DJANGO_DEBUG", default=False)
 
